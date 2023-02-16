@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Jlink Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/charge_bridge_drive.elf",
+            "request": "launch",
+            "device": "STM32f030c8",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "jlink",
+            "interface": "swd",
+            "runToMain": true
+        },
+        {
+            "name": "OpenOCD Debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/charge_bridge_drive.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "gdbPath" : "arm-none-eabi-gdb",
+            "configFiles": [
+                "interface/cmsis-dap.cfg",
+                "target/stm32f0x.cfg"
+            ],
+            "runToMain": true
+        }
+    ]
+}

@@ -27,8 +27,12 @@
 
 #define RxBuf_SIZE   1
 uint8_t RxBuf[RxBuf_SIZE];
+extern int g_PeriodVal;
 EmbeddedCli *cli;
-void onLed(EmbeddedCli *cli, char *args, void *context);
+void DeadTime(EmbeddedCli *cli, char *args, void *context);
+void Period(EmbeddedCli *cli, char *args, void *context);
+void MX_TIM1_Reperiod(int period);
+void MX_TIM1_RedeadTime(int deadtime);
 void writeChar(EmbeddedCli *embeddedCli, char c);
 
 /* USER CODE END 0 */
@@ -66,15 +70,24 @@ void MX_USART2_UART_Init(void)
   HAL_UART_Receive_IT(&huart2, RxBuf, 1);
   cli = embeddedCliNewDefault();
 
-  struct CliCommandBinding ledCmd = {
-          "get-led",
-          "Get led status",
+  struct CliCommandBinding onPeriodCmd = {
+          "set_period",
+          "set period val",
           false,
           NULL,
-          onLed
+          Period
   };
 
-  embeddedCliAddBinding(cli, ledCmd);
+  struct CliCommandBinding onDeadTimeCmd = {
+          "set_deadtime",
+          "Set deadtime val",
+          false,
+          NULL,
+          DeadTime
+  };
+
+  embeddedCliAddBinding(cli, onPeriodCmd);
+  embeddedCliAddBinding(cli, onDeadTimeCmd);
   cli->writeChar = writeChar;
 
   printf("hello\n");
@@ -102,7 +115,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF1_USART2;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -158,8 +171,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
-void onLed(EmbeddedCli *cli, char *args, void *context) {
-  printf("onLed\n");
+void Period(EmbeddedCli *cli, char *args, void *context) {
+  printf("period:%d\r\n", atoi(args));
+  g_PeriodVal = atoi(args);
+  MX_TIM1_Reperiod(atoi(args));
+}
+
+void DeadTime(EmbeddedCli *cli, char *args, void *context) {
+  printf("deadtime:%d\r\n", atoi(args));
+  MX_TIM1_RedeadTime(atoi(args));
 }
 
 void writeChar(EmbeddedCli *embeddedCli, char c) {

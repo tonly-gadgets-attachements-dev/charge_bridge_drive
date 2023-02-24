@@ -67,7 +67,6 @@ void MX_USART2_UART_Init(void)
   }
   /* USER CODE BEGIN USART2_Init 2 */
 
-  HAL_UART_Receive_IT(&huart2, RxBuf, 1);
   cli = embeddedCliNewDefault();
 
   struct CliCommandBinding onPeriodCmd = {
@@ -91,6 +90,7 @@ void MX_USART2_UART_Init(void)
   cli->writeChar = writeChar;
 
   printf("hello\n");
+  HAL_UART_Receive_IT(&huart2, RxBuf, 1);
   /* USER CODE END USART2_Init 2 */
 
 }

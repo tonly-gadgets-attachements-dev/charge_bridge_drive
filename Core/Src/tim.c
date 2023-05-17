@@ -42,6 +42,9 @@ void MX_TIM1_Reperiod(int period)
     if (HAL_TIM_Base_Init(&htim1) != HAL_OK) {
       Error_Handler();
     }
+
+  // store period value
+    g_PeriodVal = period;
 }
 
 void MX_TIM1_RedeadTime(int deadtime)

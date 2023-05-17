@@ -19,8 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include "stm32f0xx.h"
-#include "stm32f0xx_hal_conf.h"
 
 /* USER CODE BEGIN 0 */
 #define EMBEDDED_CLI_IMPL

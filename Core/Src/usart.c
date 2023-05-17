@@ -32,6 +32,7 @@ uint8_t RxBuf[RxBuf_SIZE];
 EmbeddedCli *cli;
 void DeadTime(EmbeddedCli *cli, char *args, void *context);
 void Period(EmbeddedCli *cli, char *args, void *context);
+void Duty(EmbeddedCli *cli, char *args, void *context);
 void MX_TIM1_Period_Set(int period);
 void MX_TIM1_Deadtime_Set(int deadtime);
 void writeChar(EmbeddedCli *embeddedCli, char c);
@@ -86,8 +87,17 @@ void MX_USART2_UART_Init(void)
           DeadTime
   };
 
+  struct CliCommandBinding onDutyCmd = {
+          "set_duty",
+          "Set duty_percent val\nfrom 0 to 99",
+          false,
+          NULL,
+          Duty
+  };
+
   embeddedCliAddBinding(cli, onPeriodCmd);
   embeddedCliAddBinding(cli, onDeadTimeCmd);
+  embeddedCliAddBinding(cli, onDutyCmd);
   cli->writeChar = writeChar;
 
   printf("hello\n");
@@ -180,6 +190,11 @@ void Period(EmbeddedCli *cli, char *args, void *context) {
 void DeadTime(EmbeddedCli *cli, char *args, void *context) {
   printf("deadtime:%d\r\n", atoi(args));
   MX_TIM1_Deadtime_Set(atoi(args));
+}
+
+void Duty(EmbeddedCli *cli, char *args, void *context) {
+  printf("Duty Percent: %d\r\n", atoi(args));
+  MX_TIM1_Duty_Set(atoi(args));
 }
 
 void writeChar(EmbeddedCli *embeddedCli, char c) {

@@ -50,6 +50,16 @@ void MX_TIM1_Deadtime_Set(uint32_t deadtime)
   MX_TIM1_Init();
 }
 
+void MX_TIM1_Duty_Set(uint32_t duty)
+{
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
+
+  duty_percent = duty;
+  MX_TIM1_Init();
+}
+
 /* TIM1 init function */
 void MX_TIM1_Init(void)
 {

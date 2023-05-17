@@ -23,42 +23,14 @@
 
 /* USER CODE BEGIN 0 */
 
-/* USER CODE END 0 */
-
-TIM_HandleTypeDef htim1;
 static uint32_t g_PeriodVal = 99;
 static uint8_t duty_percent = 50;
 static uint32_t dead_time   = 100;
 
-void MX_TIM1_Period_Set(uint32_t period)
-{
-  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
-    Error_Handler();
-  }
+/* USER CODE END 0 */
 
-  g_PeriodVal = period;
-  MX_TIM1_Init();
-}
+TIM_HandleTypeDef htim1;
 
-void MX_TIM1_Deadtime_Set(uint32_t deadtime)
-{
-  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
-    Error_Handler();
-  }
-
-  dead_time = deadtime;
-  MX_TIM1_Init();
-}
-
-void MX_TIM1_Duty_Set(uint32_t duty)
-{
-  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
-    Error_Handler();
-  }
-
-  duty_percent = duty;
-  MX_TIM1_Init();
-}
 
 /* TIM1 init function */
 void MX_TIM1_Init(void)
@@ -195,4 +167,33 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 
 /* USER CODE BEGIN 1 */
 
+void MX_TIM1_Period_Set(uint32_t period)
+{
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
+
+  g_PeriodVal = period;
+  MX_TIM1_Init();
+}
+
+void MX_TIM1_Deadtime_Set(uint32_t deadtime)
+{
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
+
+  dead_time = deadtime;
+  MX_TIM1_Init();
+}
+
+void MX_TIM1_Duty_Set(uint32_t duty)
+{
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
+
+  duty_percent = duty;
+  MX_TIM1_Init();
+}
 /* USER CODE END 1 */

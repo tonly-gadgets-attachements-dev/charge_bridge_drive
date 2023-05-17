@@ -24,18 +24,14 @@
 
 /* USER CODE BEGIN 0 */
 #define EMBEDDED_CLI_IMPL
+#include "tim.h"
 #include <stdio.h>
 #include "embedded_cli.h"
 
 #define RxBuf_SIZE   1
 uint8_t RxBuf[RxBuf_SIZE];
 EmbeddedCli *cli;
-void DeadTime(EmbeddedCli *cli, char *args, void *context);
-void Period(EmbeddedCli *cli, char *args, void *context);
-void Duty(EmbeddedCli *cli, char *args, void *context);
-void MX_TIM1_Period_Set(int period);
-void MX_TIM1_Deadtime_Set(int deadtime);
-void writeChar(EmbeddedCli *embeddedCli, char c);
+static void cli_init(void);
 
 /* USER CODE END 0 */
 
@@ -69,37 +65,7 @@ void MX_USART2_UART_Init(void)
   }
   /* USER CODE BEGIN USART2_Init 2 */
 
-  cli = embeddedCliNewDefault();
-
-  struct CliCommandBinding onPeriodCmd = {
-          "set_period",
-          "set period val\n\tval from 1~65536, Unit about 1.6ms\n\t100: 6.67Khz; 200: 3.3Khz",
-          false,
-          NULL,
-          Period
-  };
-
-  struct CliCommandBinding onDeadTimeCmd = {
-          "set_deadtime",
-          "Set deadtime val\n\tfrom 0 to ~ 255",
-          false,
-          NULL,
-          DeadTime
-  };
-
-  struct CliCommandBinding onDutyCmd = {
-          "set_duty",
-          "Set duty_percent val\n\tfrom 0 to 99",
-          false,
-          NULL,
-          Duty
-  };
-
-  embeddedCliAddBinding(cli, onPeriodCmd);
-  embeddedCliAddBinding(cli, onDeadTimeCmd);
-  embeddedCliAddBinding(cli, onDutyCmd);
-  cli->writeChar = writeChar;
-
+  cli_init();
   printf("PWM(Motor) Driver Test v0.1\n");
   HAL_UART_Receive_IT(&huart2, RxBuf, 1);
   /* USER CODE END USART2_Init 2 */
@@ -182,22 +148,56 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
-void Period(EmbeddedCli *cli, char *args, void *context) {
+static void Period(EmbeddedCli *cli, char *args, void *context) {
   printf("period:%d\r\n", atoi(args));
   MX_TIM1_Period_Set(atoi(args));
 }
 
-void DeadTime(EmbeddedCli *cli, char *args, void *context) {
+static void DeadTime(EmbeddedCli *cli, char *args, void *context) {
   printf("deadtime:%d\r\n", atoi(args));
   MX_TIM1_Deadtime_Set(atoi(args));
 }
 
-void Duty(EmbeddedCli *cli, char *args, void *context) {
+static void Duty(EmbeddedCli *cli, char *args, void *context) {
   printf("Duty Percent: %d\r\n", atoi(args));
   MX_TIM1_Duty_Set(atoi(args));
 }
 
 void writeChar(EmbeddedCli *embeddedCli, char c) {
   HAL_UART_Transmit(&huart2, &c, 1, HAL_MAX_DELAY);
+}
+
+static void cli_init(void)
+{
+  cli = embeddedCliNewDefault();
+
+  struct CliCommandBinding onPeriodCmd = {
+    "set_period",
+    "set period val\n\tval from 1~65536, Unit about 1.6ms\n\t100: 6.67Khz; 200: 3.3Khz",
+    false,
+    NULL,
+    Period
+  };
+
+  struct CliCommandBinding onDeadTimeCmd = {
+    "set_deadtime",
+    "Set deadtime val\n\tfrom 0 to ~ 255",
+    false,
+    NULL,
+    DeadTime
+  };
+
+  struct CliCommandBinding onDutyCmd = {
+    "set_duty",
+    "Set duty_percent val\n\tfrom 0 to 99",
+    false,
+    NULL,
+    Duty
+  };
+
+  embeddedCliAddBinding(cli, onPeriodCmd);
+  embeddedCliAddBinding(cli, onDeadTimeCmd);
+  embeddedCliAddBinding(cli, onDutyCmd);
+  cli->writeChar = writeChar;
 }
 /* USER CODE END 1 */

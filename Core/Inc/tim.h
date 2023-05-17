@@ -30,6 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 
+#include <stdint.h>
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim1;
@@ -43,7 +44,8 @@ void MX_TIM1_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
-
+void MX_TIM1_Period_Set(uint32_t period);
+void MX_TIM1_Deadtime_Set(uint32_t deadtime);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

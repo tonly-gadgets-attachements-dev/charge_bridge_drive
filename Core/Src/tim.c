@@ -26,59 +26,27 @@
 
 TIM_HandleTypeDef htim1;
 int g_PeriodVal = 99;
+uint8_t duty_percent = 50;
+uint32_t dead_time = 100;
 
 void MX_TIM1_Reperiod(int period)
 {
-    if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
-      Error_Handler();
-    }
-    htim1.Instance = TIM1;
-    htim1.Init.Prescaler = 71;
-    htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim1.Init.Period = period;
-    htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim1.Init.RepetitionCounter = 0;
-    htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(&htim1) != HAL_OK) {
-      Error_Handler();
-    }
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
 
-  // store period value
-    g_PeriodVal = period;
+  g_PeriodVal = period;
+  MX_TIM1_Init();
 }
 
 void MX_TIM1_RedeadTime(int deadtime)
 {
-    TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+  if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
+    Error_Handler();
+  }
 
-    if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
-      Error_Handler();
-    }
-    htim1.Instance = TIM1;
-    htim1.Init.Prescaler = 71;
-    htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim1.Init.Period = g_PeriodVal;
-    htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim1.Init.RepetitionCounter = 0;
-    htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(&htim1) != HAL_OK) {
-      Error_Handler();
-    }
-
-    sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-    sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-    sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-    sBreakDeadTimeConfig.DeadTime = deadtime;
-    sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-    sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-    sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-    if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
-    {
-      printf("HAL_TIMEx_ConfigBreakDeadTime faild\r\n");
-      Error_Handler();
-    }
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+  dead_time = deadtime;
+  MX_TIM1_Init();
 }
 
 /* TIM1 init function */
@@ -124,7 +92,7 @@ void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 50;
+  sConfigOC.Pulse = g_PeriodVal * duty_percent / 100;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -137,7 +105,7 @@ void MX_TIM1_Init(void)
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.DeadTime = dead_time;
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;

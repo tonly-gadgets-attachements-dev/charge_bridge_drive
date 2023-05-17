@@ -19,6 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
+#include "stm32f0xx.h"
+#include "stm32f0xx_hal_conf.h"
 
 /* USER CODE BEGIN 0 */
 #define EMBEDDED_CLI_IMPL
@@ -27,7 +29,6 @@
 
 #define RxBuf_SIZE   1
 uint8_t RxBuf[RxBuf_SIZE];
-extern int g_PeriodVal;
 EmbeddedCli *cli;
 void DeadTime(EmbeddedCli *cli, char *args, void *context);
 void Period(EmbeddedCli *cli, char *args, void *context);
@@ -71,7 +72,7 @@ void MX_USART2_UART_Init(void)
 
   struct CliCommandBinding onPeriodCmd = {
           "set_period",
-          "set period val",
+          "set period val\nval from 1~65536, Unit about 1.6ms\n100: 6.67Khz; 200: 3.3Khz",
           false,
           NULL,
           Period
@@ -173,7 +174,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void Period(EmbeddedCli *cli, char *args, void *context) {
   printf("period:%d\r\n", atoi(args));
-  g_PeriodVal = atoi(args);
   MX_TIM1_Reperiod(atoi(args));
 }
 

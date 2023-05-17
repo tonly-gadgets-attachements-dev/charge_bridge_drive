@@ -73,7 +73,7 @@ void MX_USART2_UART_Init(void)
 
   struct CliCommandBinding onPeriodCmd = {
           "set_period",
-          "set period val\nval from 1~65536, Unit about 1.6ms\n100: 6.67Khz; 200: 3.3Khz",
+          "set period val\n\tval from 1~65536, Unit about 1.6ms\n\t100: 6.67Khz; 200: 3.3Khz",
           false,
           NULL,
           Period
@@ -81,7 +81,7 @@ void MX_USART2_UART_Init(void)
 
   struct CliCommandBinding onDeadTimeCmd = {
           "set_deadtime",
-          "Set deadtime val\nfrom 0 to ~ 255",
+          "Set deadtime val\n\tfrom 0 to ~ 255",
           false,
           NULL,
           DeadTime
@@ -89,7 +89,7 @@ void MX_USART2_UART_Init(void)
 
   struct CliCommandBinding onDutyCmd = {
           "set_duty",
-          "Set duty_percent val\nfrom 0 to 99",
+          "Set duty_percent val\n\tfrom 0 to 99",
           false,
           NULL,
           Duty
@@ -100,7 +100,7 @@ void MX_USART2_UART_Init(void)
   embeddedCliAddBinding(cli, onDutyCmd);
   cli->writeChar = writeChar;
 
-  printf("hello\n");
+  printf("PWM(Motor) Driver Test v0.1\n");
   HAL_UART_Receive_IT(&huart2, RxBuf, 1);
   /* USER CODE END USART2_Init 2 */
 

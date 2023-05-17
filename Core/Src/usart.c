@@ -171,7 +171,7 @@ static void cli_init(void)
 
   struct CliCommandBinding onPeriodCmd = {
     "set_period",
-    "set period val\n\tval from 1~65536, Unit about 1.6ms\n\t100: 6.67Khz; 200: 3.3Khz",
+    "set period val\n\tval from 1~65536, Unit about 1ms\n\t100: 10Khz; 200: 5Khz; 50: 20Khz",
     false,
     NULL,
     Period

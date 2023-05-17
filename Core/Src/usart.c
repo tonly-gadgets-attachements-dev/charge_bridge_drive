@@ -32,8 +32,8 @@ uint8_t RxBuf[RxBuf_SIZE];
 EmbeddedCli *cli;
 void DeadTime(EmbeddedCli *cli, char *args, void *context);
 void Period(EmbeddedCli *cli, char *args, void *context);
-void MX_TIM1_Reperiod(int period);
-void MX_TIM1_RedeadTime(int deadtime);
+void MX_TIM1_Period_Set(int period);
+void MX_TIM1_Deadtime_Set(int deadtime);
 void writeChar(EmbeddedCli *embeddedCli, char c);
 
 /* USER CODE END 0 */
@@ -80,7 +80,7 @@ void MX_USART2_UART_Init(void)
 
   struct CliCommandBinding onDeadTimeCmd = {
           "set_deadtime",
-          "Set deadtime val",
+          "Set deadtime val\nfrom 0 to ~ 255",
           false,
           NULL,
           DeadTime
@@ -174,12 +174,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void Period(EmbeddedCli *cli, char *args, void *context) {
   printf("period:%d\r\n", atoi(args));
-  MX_TIM1_Reperiod(atoi(args));
+  MX_TIM1_Period_Set(atoi(args));
 }
 
 void DeadTime(EmbeddedCli *cli, char *args, void *context) {
   printf("deadtime:%d\r\n", atoi(args));
-  MX_TIM1_RedeadTime(atoi(args));
+  MX_TIM1_Deadtime_Set(atoi(args));
 }
 
 void writeChar(EmbeddedCli *embeddedCli, char c) {

@@ -19,17 +19,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
+#include <stdint.h>
 
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim1;
-int g_PeriodVal = 99;
-uint8_t duty_percent = 50;
-uint32_t dead_time = 100;
+static uint32_t g_PeriodVal = 99;
+static uint8_t duty_percent = 50;
+static uint32_t dead_time   = 100;
 
-void MX_TIM1_Reperiod(int period)
+void MX_TIM1_Period_Set(uint32_t period)
 {
   if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
     Error_Handler();
@@ -39,7 +40,7 @@ void MX_TIM1_Reperiod(int period)
   MX_TIM1_Init();
 }
 
-void MX_TIM1_RedeadTime(int deadtime)
+void MX_TIM1_Deadtime_Set(uint32_t deadtime)
 {
   if (HAL_TIM_Base_DeInit(&htim1) != HAL_OK) {
     Error_Handler();

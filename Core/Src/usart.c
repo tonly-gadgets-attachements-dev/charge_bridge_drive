@@ -171,7 +171,7 @@ static void cli_init(void)
 
   struct CliCommandBinding onPeriodCmd = {
     "set_period",
-    "set period val\n\tval from 1~65536, Unit about 1ms\n\t100: 10Khz; 200: 5Khz; 50: 20Khz",
+    "set period val\n\tval from 1~65536, Unit about 1ms\n\t100: 10Khz; 200: 5Khz; 50: 20Khz\n",
     false,
     NULL,
     Period
@@ -179,7 +179,7 @@ static void cli_init(void)
 
   struct CliCommandBinding onDeadTimeCmd = {
     "set_deadtime",
-    "Set deadtime val\n\tfrom 0 to ~ 255",
+    "Set deadtime val\n\tfrom 0 to ~ 255\n",
     false,
     NULL,
     DeadTime
@@ -187,7 +187,7 @@ static void cli_init(void)
 
   struct CliCommandBinding onDutyCmd = {
     "set_duty",
-    "Set duty_percent val\n\tfrom 0 to 99",
+    "Set duty_percent val\n\tfrom 0 to 99\n\tPlease Note: Duty for N pin not for P pin\n",
     false,
     NULL,
     Duty

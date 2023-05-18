@@ -69,8 +69,6 @@ void Error_Handler(void);
 #define PWM1_N_GPIO_Port GPIOA
 #define PWM1_P_Pin GPIO_PIN_8
 #define PWM1_P_GPIO_Port GPIOA
-#define PWM1_PHASE_Pin GPIO_PIN_9
-#define PWM1_PHASE_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14

@@ -161,6 +161,11 @@ static void Duty(EmbeddedCli *cli, char *args, void *context) {
   MX_TIM1_Duty_Set(atoi(args));
 }
 
+static void Phase(EmbeddedCli *cli, char *args, void *context) {
+  printf("Phase Shift: %d\r\n", atoi(args));
+  MX_TIM1_Set_PhaseShift(atoi(args));
+}
+
 void writeChar(EmbeddedCli *embeddedCli, char c) {
   HAL_UART_Transmit(&huart2, &c, 1, HAL_MAX_DELAY);
 }
@@ -193,9 +198,18 @@ static void cli_init(void)
     Duty
   };
 
+  struct CliCommandBinding onPhaseCmd = {
+    "set_phase",
+    "set_phase val\n",
+    false,
+    NULL,
+    Phase
+  };
+
   embeddedCliAddBinding(cli, onPeriodCmd);
   embeddedCliAddBinding(cli, onDeadTimeCmd);
   embeddedCliAddBinding(cli, onDutyCmd);
+  embeddedCliAddBinding(cli, onPhaseCmd);
   cli->writeChar = writeChar;
 }
 /* USER CODE END 1 */

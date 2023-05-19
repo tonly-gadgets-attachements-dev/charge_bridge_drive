@@ -49,6 +49,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE BEGIN Prototypes */
 void MX_TIM1_Period_Set(uint32_t period);
 void MX_TIM1_Deadtime_Set(uint32_t deadtime);
+void MX_TIM1_Set_PhaseShift(uint32_t phase);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
+#include "stm32f0xx_hal_tim.h"
 
 /* USER CODE BEGIN 0 */
 #include <stdint.h>
@@ -144,7 +145,7 @@ void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_RESET;
   sSlaveConfig.InputTrigger = TIM_TS_ITR0;
   if (HAL_TIM_SlaveConfigSynchro(&htim3, &sSlaveConfig) != HAL_OK)
   {
@@ -309,9 +310,21 @@ void MX_TIM1_Duty_Set(uint32_t duty)
   //
   // duty_percent = duty;
   // MX_TIM1_Init();
-  MX_TIM3_Init();
+  // MX_TIM3_Init();
+  HAL_TIM_Base_Init(&htim3);
   // __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 3333);
-  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 5555);
+  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 2222);
   // __HAL_TIM_ENABLE_OCxPRELOAD(&htim1, TIM_CHANNEL_2);
+}
+
+
+void MX_TIM1_Set_PhaseShift(uint32_t phase)
+{
+  if (HAL_TIM_Base_DeInit(&htim3) != HAL_OK) {
+    Error_Handler();
+  }
+  // HAL_TIM_Base_Init(&htim3);
+  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, phase);
+  MX_TIM3_Init();
 }
 /* USER CODE END 1 */
